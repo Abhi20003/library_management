@@ -5,7 +5,7 @@ import 'package:library_management/services/auth.dart';
 import 'package:library_management/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:library_management/screens/home/book_list.dart';
-import 'package:library_management/screens/home/book_tile.dart';
+import 'package:library_management/screens/home/book_tile_user.dart';
 import 'package:library_management/screens/home/add_book.dart';
 import 'package:library_management/shared/showpanel.dart';
 
@@ -41,7 +41,10 @@ class HomeAdmin extends StatelessWidget {
             )
           ],
         ),
-        body: Container(child: BookList()),
+        body: Container(
+            child: BookList(
+          endpoint: "Admin",
+        )),
       ),
     );
   }

@@ -21,6 +21,10 @@ class DatabaseService {
         .update({'title': title, 'author': author, 'status': status});
   }
 
+  Future deleteBook(String title) async {
+    bookCollection.doc(title).delete();
+  }
+
   //book list from snapshot
   List<Book> _bookListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
