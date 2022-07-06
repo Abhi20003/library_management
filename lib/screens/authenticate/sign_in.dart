@@ -1,8 +1,5 @@
 import 'package:library_management/services/auth.dart';
-import 'package:library_management/shared/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:library_management/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,7 +12,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
-  final _formkey = GlobalKey<FormState>();
+  // final _formkey = GlobalKey<FormState>();
   bool loading = false;
 
   //text field state
@@ -32,15 +29,6 @@ class _SignInState extends State<SignIn> {
               backgroundColor: Colors.blue[400],
               elevation: 0.0,
               title: Text("SignIn to the Library"),
-              // actions: <Widget>[
-              //   FlatButton.icon(
-              //     icon: Icon(Icons.person),
-              //     label: Text('Register'),
-              //     onPressed: () {
-              //       widget.value();
-              //     },
-              //   )
-              // ],
             ),
             body: Container(
               padding: EdgeInsets.symmetric(vertical: 80.0, horizontal: 30.0),
@@ -78,8 +66,6 @@ class _SignInState extends State<SignIn> {
                         color: Colors.white,
                         onPressed: () async {
                           widget.value();
-                          // dynamic result = await _auth.SignInWithGoogle();
-                          // print(result);
                         }),
                   ),
                   Text(

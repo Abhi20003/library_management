@@ -1,9 +1,25 @@
+import 'package:library_management/models/book.dart';
 import 'package:library_management/models/user.dart';
+import 'package:library_management/services/connection.dart';
 import 'package:library_management/services/database.dart';
-import 'package:library_management/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:library_management/shared/constants.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
+
+List haveIt = [];
+List list = [];
+List<Book> addpending = [];
+int RandomNumber() {
+  Random random = new Random();
+  int id = random.nextInt(100000000);
+  if (haveIt.contains(id)) {
+    RandomNumber();
+  } else {
+    haveIt.add(id);
+  }
+  return id;
+}
 
 class AddBook extends StatefulWidget {
   AddBook();
@@ -14,10 +30,12 @@ class AddBook extends StatefulWidget {
 
 class _AddBook extends State<AddBook> {
   final _formkey = GlobalKey<FormState>();
+  final localdb = LocalDatabase.instance;
 
   //form values
   String? _currentTitle;
   String? _currentAuthor;
+  int id = RandomNumber();
 
   @override
   Widget build(BuildContext context) {
@@ -43,23 +61,37 @@ class _AddBook extends State<AddBook> {
             decoration: TextInputDecoration.copyWith(hintText: 'Author'),
             onChanged: (val) => setState(() => _currentAuthor = val)),
         SizedBox(height: 20.0),
-        // TextFormField(
-        //     initialValue: "",
-        //     decoration: TextInputDecoration.copyWith(hintText: 'Status'),
-        //     onChanged: (val) => setState(() => _currentstatus = val)),
         RaisedButton(
             color: Colors.pink[400],
             child: Text(
-              'Update',
+              'Add Book',
               style: TextStyle(color: Colors.white),
             ),
             onPressed: () async {
               if (_formkey.currentState!.validate()) {
-                await DatabaseService().addBook(
-                  _currentTitle ?? "",
-                  _currentAuthor ?? "",
-                  false,
-                );
+                print(_currentTitle);
+                if (await hasConnection()) {
+                  await DatabaseService().addBook(
+                    _currentTitle ?? "",
+                    _currentAuthor ?? "",
+                    false,
+                    id,
+                  );
+                } else {
+                  addpending.add(Book(
+                      title: _currentTitle!,
+                      author: _currentAuthor!,
+                      status: false,
+                      id: id));
+                }
+                // print(addpending);
+                Map<String, dynamic> row = {
+                  LocalDatabase().coltitle: _currentTitle,
+                  LocalDatabase().colAuthor: _currentAuthor,
+                  LocalDatabase().colStatus: 0,
+                  LocalDatabase().colId: id,
+                };
+                localdb.insert(row);
                 Navigator.pop(context);
               }
             })

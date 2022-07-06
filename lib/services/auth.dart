@@ -1,9 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:library_management/models/user.dart';
-import 'package:library_management/screens/home/home_admin.dart';
-import 'package:library_management/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
@@ -44,7 +41,6 @@ class AuthService {
       return _userFromFirebaseUser(user);
     } on FirebaseAuthException catch (e) {
       print(e.toString());
-      print('yes');
       return e.message;
     }
   }
@@ -108,12 +104,9 @@ class AuthService {
       }
     } else {
       GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      print('done');
       if (googleUser != null) {
         final GoogleSignInAuthentication googleSignInAuthentication =
             await googleUser.authentication;
-
-        print('done');
 
         final AuthCredential credential = GoogleAuthProvider.credential(
           accessToken: googleSignInAuthentication.accessToken,
@@ -121,9 +114,7 @@ class AuthService {
         );
         try {
           UserCredential result = await _auth.signInWithCredential(credential);
-          print('done');
           User? user = result.user;
-          print(user);
           return _userFromFirebaseUser(user);
         } on PlatformException catch (e) {
           print("Error ${e.toString()}");

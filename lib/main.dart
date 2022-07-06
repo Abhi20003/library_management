@@ -1,9 +1,15 @@
+import 'package:library_management/screens/authenticate/authenticate.dart';
+import 'package:library_management/screens/home/home_admin.dart';
+import 'package:library_management/screens/home/list_view_user.dart';
 import 'package:library_management/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:library_management/screens/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:library_management/models/user.dart';
+import 'package:library_management/screens/home/list_view_admin.dart';
+
+int id = 0;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +27,11 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: AuthService().user,
       child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/listUserBooks': (context) => ListUserBooks(),
+          '/listAdminBooks': (context) => ListAdminBooks(),
+        },
         home: Wrapper(),
       ),
     );

@@ -6,18 +6,18 @@ class Userdet {
   Userdet({this.uid});
 }
 
-class UserData {
-  late String title;
-  late String author;
-  late bool status;
-  late String uid;
+// class UserData {
+//   late String title;
+//   late String author;
+//   late bool status;
+//   late String uid;
 
-  UserData(
-      {required this.title,
-      required this.author,
-      required this.status,
-      required this.uid});
-}
+//   UserData(
+//       {required this.title,
+//       required this.author,
+//       required this.status,
+//       required this.uid});
+// }
 
 class Request {
   final String username;

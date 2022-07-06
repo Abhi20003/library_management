@@ -1,10 +1,25 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:library_management/models/book.dart';
-import 'package:library_management/screens/home/book_list.dart';
+import 'package:library_management/services/connection.dart';
 import 'package:library_management/services/database.dart';
 import 'package:library_management/shared/showpanel.dart';
+
+List<Book> delpending = [];
+List<Book> updatepending = [];
+bool result = false;
+
+bool checkBool(var temp) {
+  // print(temp);
+  if (temp == 0) {
+    return false;
+  } else if (temp == 1) {
+    return true;
+  } else if (temp == true) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 class BookTileAdmin extends StatefulWidget {
   final Book? book;
@@ -16,23 +31,55 @@ class BookTileAdmin extends StatefulWidget {
 
 class _BookTileAdminState extends State<BookTileAdmin> {
   bool? value;
+
+  LocalDatabase localdb = LocalDatabase.instance;
+
   @override
   Widget build(BuildContext context) {
+    void func() {
+      hasConnection().then((t1) {
+        setState(() {
+          result = t1; // Future is completed with a value.
+        });
+      });
+    }
+
+    func();
+    // print(widget.book!.status);
+
     return Padding(
       padding: EdgeInsets.only(top: 8.0),
       child: Card(
         margin: EdgeInsets.fromLTRB(20.0, 6.0, 20.0, 0.0),
         child: ListTile(
           leading: Checkbox(
-            value: widget.book!.status,
+            value: checkBool(widget.book!.status),
             onChanged: ((value) {
               setState(() {
                 print(value);
-                widget.book!.status = !widget.book!.status;
-                DatabaseService().updateBook(widget.book!.title,
-                    widget.book!.author, widget.book!.status);
+                widget.book!.status = !checkBool(widget.book!.status);
+                if (result) {
+                  DatabaseService().updateBook(
+                      widget.book!.title,
+                      widget.book!.author,
+                      checkBool(widget.book!.status),
+                      widget.book!.id);
+                } else {
+                  updatepending.add(Book(
+                      title: widget.book!.title,
+                      author: widget.book!.author,
+                      status: checkBool(widget.book!.status),
+                      id: widget.book!.id));
+                }
+                Map<String, dynamic> row = {
+                  LocalDatabase().coltitle: widget.book!.title,
+                  LocalDatabase().colAuthor: widget.book!.author,
+                  LocalDatabase().colStatus:
+                      checkBool(widget.book!.status) ? 1 : 0,
+                  LocalDatabase().colId: widget.book!.id,
+                };
+                localdb.update(row);
               });
-              print(widget.book!.status);
             }),
           ),
           title: Text(widget.book!.title),
@@ -42,12 +89,23 @@ class _BookTileAdminState extends State<BookTileAdmin> {
             children: [
               IconButton(
                 onPressed: () => showEditBookPanel(context, widget.book!.title,
-                    widget.book!.author, widget.book!.status),
+                    widget.book!.author, widget.book!.status, widget.book!.id),
                 icon: Icon(Icons.settings),
               ),
               IconButton(
-                  onPressed: () =>
-                      DatabaseService().deleteBook(widget.book!.title),
+                  onPressed: () {
+                    if (result) {
+                      DatabaseService().deleteBook(widget.book!.id);
+                    } else {
+                      delpending.add(Book(
+                          title: widget.book!.title,
+                          author: widget.book!.author,
+                          status: checkBool(widget.book!.status),
+                          id: widget.book!.id));
+                    }
+                    // print(delpending);
+                    LocalDatabase().delete(widget.book!.id);
+                  },
                   icon: Icon(Icons.delete)),
             ],
           ),

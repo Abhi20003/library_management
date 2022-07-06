@@ -1,6 +1,9 @@
+// Not Working
+// Giving Some textBox error
+// TBDD
+
 import 'package:library_management/models/user.dart';
 import 'package:library_management/services/database.dart';
-import 'package:library_management/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:library_management/shared/constants.dart';
 import 'package:provider/provider.dart';
@@ -9,8 +12,13 @@ class UpdateBook extends StatefulWidget {
   String title;
   String author;
   bool status;
+  int id;
 
-  UpdateBook({required this.title, required this.author, required this.status});
+  UpdateBook(
+      {required this.title,
+      required this.author,
+      required this.status,
+      required this.id});
 
   @override
   State<UpdateBook> createState() => _UpdateBook();
@@ -23,12 +31,14 @@ class _UpdateBook extends State<UpdateBook> {
   dynamic _currentTitle;
   dynamic _currentAuthor;
   dynamic _currentStatus;
+  int? _currentId;
 
   @override
   Widget build(BuildContext context) {
     _currentAuthor = widget.author;
     _currentStatus = widget.status;
     _currentTitle = widget.title;
+    _currentId = widget.id;
     final user = Provider.of<Userdet?>(context);
     return Form(
       key: _formkey,
@@ -64,6 +74,7 @@ class _UpdateBook extends State<UpdateBook> {
                   _currentTitle ?? "",
                   _currentAuthor ?? "",
                   _currentStatus ?? false,
+                  _currentId!,
                 );
 
                 Navigator.pop(context);

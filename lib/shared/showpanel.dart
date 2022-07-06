@@ -14,7 +14,8 @@ void showAddBookPanel(context) {
       });
 }
 
-void showEditBookPanel(context, String title, String author, bool status) {
+void showEditBookPanel(
+    context, String title, String author, bool status, int id) {
   showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -24,6 +25,7 @@ void showEditBookPanel(context, String title, String author, bool status) {
             title: title,
             author: author,
             status: status,
+            id: id,
           ),
         );
       });

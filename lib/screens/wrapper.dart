@@ -1,9 +1,9 @@
 import 'package:library_management/screens/authenticate/authenticate.dart';
-import 'package:library_management/screens/home/home_user.dart';
+import 'package:library_management/screens/home/home_admin.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:library_management/models/user.dart';
-import 'package:library_management/screens/home/home_admin.dart';
+import 'package:library_management/screens/home/home_user.dart';
 
 class Wrapper extends StatelessWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -20,6 +20,5 @@ class Wrapper extends StatelessWidget {
       print(user.uid);
       return HomeUser();
     }
-    //return either home or authenticate widget
   }
 }
