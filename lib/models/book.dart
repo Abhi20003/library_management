@@ -1,7 +1,7 @@
 class Book {
   final String title;
   final String author;
-  bool status;
+  int status;
   final int id;
 
   Book(
@@ -14,7 +14,7 @@ class Book {
     return Book(
       title: data['Title'],
       author: data['Author'],
-      status: data['Status'] == 0 ? false : true,
+      status: data['Status'],
       id: data['Id'],
     );
   }

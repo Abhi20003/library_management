@@ -13,13 +13,13 @@ class DatabaseService {
   final CollectionReference bookCollection =
       FirebaseFirestore.instance.collection('books');
 
-  Future addBook(String title, String author, bool status, int id) async {
+  Future addBook(String title, String author, int status, int id) async {
     return await bookCollection
         .doc(id.toString())
         .set({'title': title, 'author': author, 'status': status, 'id': id});
   }
 
-  Future updateBook(String title, String author, bool status, int id) async {
+  Future updateBook(String title, String author, int status, int id) async {
     bookCollection
         .doc(id.toString())
         .update({'title': title, 'author': author, 'status': status, 'id': id});
@@ -64,7 +64,7 @@ class DatabaseService {
 class LocalDatabase {
   LocalDatabase();
 
-  final _databaseName = "t102.db";
+  final _databaseName = "dnew6.db";
   final _databaseVersion = 1;
 
   final table = "BooksTable";
@@ -107,11 +107,11 @@ class LocalDatabase {
     Database db = await instance.database;
     var allRows = await db.query(table);
     List<Book> books = List.filled(
-        0, Book(title: "", author: "", status: false, id: 0),
+        0, Book(title: "", author: "", status: 0, id: 0),
         growable: true);
     allRows.forEach((result) {
-      Book product = Book.fromMap(result);
-      books.add(product);
+      Book book = Book.fromMap(result);
+      books.add(book);
     });
     return books;
   }

@@ -43,25 +43,24 @@ class _BookTileUserState extends State<BookTileUser> {
             onChanged: ((value) {
               setState(() {
                 print(value);
-                widget.book!.status = !checkBool(widget.book!.status);
+                widget.book!.status = checkBool(widget.book!.status) ? 0 : 1;
                 if (result) {
                   DatabaseService().updateBook(
                       widget.book!.title,
                       widget.book!.author,
-                      checkBool(widget.book!.status),
+                      widget.book!.status,
                       widget.book!.id);
                 } else {
                   updatepending.add(Book(
                       title: widget.book!.title,
                       author: widget.book!.author,
-                      status: checkBool(widget.book!.status),
+                      status: widget.book!.status,
                       id: widget.book!.id));
                 }
                 Map<String, dynamic> row = {
                   LocalDatabase().coltitle: widget.book!.title,
                   LocalDatabase().colAuthor: widget.book!.author,
-                  LocalDatabase().colStatus:
-                      checkBool(widget.book!.status) ? 1 : 0,
+                  LocalDatabase().colStatus: widget.book!.status,
                   LocalDatabase().colId: widget.book!.id,
                 };
                 localdb.update(row);

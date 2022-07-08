@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class UpdateBook extends StatefulWidget {
   String title;
   String author;
-  bool status;
+  int status;
   int id;
 
   UpdateBook(

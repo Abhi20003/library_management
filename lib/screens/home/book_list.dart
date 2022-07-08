@@ -6,11 +6,13 @@ import 'package:library_management/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:library_management/screens/home/book_tile_user.dart';
 import 'package:library_management/screens/home/book_tile_admin.dart';
+import 'package:library_management/screens/home/book_tile_admin.dart';
 
 int a = 1;
 List l2 = [];
 bool result = false;
 List<Book> list = [];
+bool flag = false;
 
 class BookList extends StatefulWidget {
   final String endpoint;
@@ -31,6 +33,14 @@ class _BookListState extends State<BookList> {
       localdb.queryAllRows().then((value) {
         setState(() {
           list = value; // Future is completed with a value.
+          // value.forEach((book) {
+          //   if (list.contains(book)) {
+          //   } else {
+          //     print(book.title);
+          //     list.add(book);
+          //   }
+          // });
+          // print("Hey $list");
         });
       });
     }
@@ -46,15 +56,44 @@ class _BookListState extends State<BookList> {
     }
 
     func();
+    // print("Hey $list");
     if (result) {
       books = Provider.of<List<Book>>(context);
-      books.forEach((book) {
-        if (list.contains(book)) {
-        } else {
-          list.add(book);
-        }
+      localdb.queryAllRows().then((value) {
+        books.forEach((book) {
+          for (int i = 0; i < list.length; i++) {
+            if (list[i].id == book.id) {
+              flag = true;
+              break;
+            } else {
+              continue;
+            }
+          }
+          if (!flag) {
+            Map<String, dynamic> row = {
+              LocalDatabase().coltitle: book.title,
+              LocalDatabase().colAuthor: book.author,
+              LocalDatabase().colStatus: book.status,
+              LocalDatabase().colId: book.id,
+            };
+            localdb.insert(row);
+          }
+          if (list.contains(book)) {
+          } else {
+            // list.add(book);
+            Map<String, dynamic> row = {
+              LocalDatabase().coltitle: book.title,
+              LocalDatabase().colAuthor: book.author,
+              LocalDatabase().colStatus: book.status,
+              LocalDatabase().colId: book.id,
+            };
+            localdb.update(row);
+          }
+        });
       });
-      // print(addpending);
+      // print("There $list");
+
+      // print("AddPending $addpending");
       addpending.forEach((book) async {
         await DatabaseService()
             .addBook(book.title, book.author, book.status, book.id);

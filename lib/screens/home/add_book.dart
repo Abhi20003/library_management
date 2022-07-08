@@ -74,14 +74,14 @@ class _AddBook extends State<AddBook> {
                   await DatabaseService().addBook(
                     _currentTitle ?? "",
                     _currentAuthor ?? "",
-                    false,
+                    0,
                     id,
                   );
                 } else {
                   addpending.add(Book(
                       title: _currentTitle!,
                       author: _currentAuthor!,
-                      status: false,
+                      status: 0,
                       id: id));
                 }
                 // print(addpending);
